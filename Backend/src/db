@@ -1,0 +1,11 @@
+-- Índice para buscar rápido por id_vigilador + fecha
+CREATE INDEX idx_dia_vigilador_vigilador_fecha
+    ON dia_vigilador (id_vigilador, fecha);
+
+-- Índice para buscar rápido por id_planilla + fecha
+CREATE INDEX idx_dia_planilla_planilla_fecha
+    ON dia_planilla (id_planilla, fecha);
+
+-- Índice para buscar rápido en continuidades por id_dia_vigilador_destino + hora_inicio_heredada
+CREATE INDEX idx_continuidad_vigilador_destino_fecha
+    ON continuidad_turno (id_dia_vigilador_destino, hora_inicio_heredada);
