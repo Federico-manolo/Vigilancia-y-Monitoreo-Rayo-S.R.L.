@@ -114,22 +114,6 @@ class ContabilidadController {
         return res.status(400).json({ error: 'Archivo requerido' });
       }
       const asistencias = parseExcelAsistencias(filePath, yearHint);
-      console.log('Asistencias parseadas:', asistencias);
-
-      if (process.env.SKIP_DB === '1') {
-        // Modo prueba: devolver solo el parseo del Excel
-        const resumen = {};
-        for (const c of asistencias) {
-          const key = `${c.legajo}`;
-          if (!resumen[key]) resumen[key] = { legajo: c.legajo, horas_diurnas: 0, horas_nocturnas: 0, horas_totales: 0, dias_trabajado: 0, ausencias: 0 };
-          resumen[key].horas_diurnas += c.horas_diurnas;
-          resumen[key].horas_nocturnas += c.horas_nocturnas;
-          resumen[key].horas_totales += c.horas_totales;
-          if (c.dia_trabajado) resumen[key].dias_trabajado += 1; else resumen[key].ausencias += 1;
-        }
-        return res.status(200).json({ asistencias: asistencias.map(a => ({ ...a, estado: AsistenciaEstado.SIN_COMPARACION })), resumen: Object.values(resumen) });
-      }
-
       const comparacion = await compararConSistema({ asistencias, toleranciaMin });
 
       // Resumen mensual por vigilador

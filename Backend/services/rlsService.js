@@ -7,7 +7,6 @@ const { sequelize } = require('../config/db');
 async function ensureRlsPolicies() {
   // Gate: solo aplicar RLS cuando se solicite explícitamente
   if (process.env.APPLY_RLS !== '1') {
-    console.log('🔒 RLS: APPLY_RLS≠1, se omite la (re)aplicación de políticas en arranque.');
     return { applied: false, reason: 'skipped' };
   }
 

@@ -5,23 +5,14 @@ const { bootstrapAdminUser } = require('./services/bootstrapService');
 const { ensureRlsPolicies } = require('./services/rlsService');
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
-
 // Función para inicializar el servidor
 const startServer = async () => {
   console.log('🚀 Iniciando servidor...');
   console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔧 Puerto: ${PORT}`);
-  console.log(`📁 Directorio de trabajo: ${process.cwd()}`);
   
   try {
-    // Probar conexión a la base de datos (saltable por variable de entorno)
-    if (process.env.SKIP_DB !== '1') {
-      await testConnection();
-    } else {
-      console.log('⚠️  SKIP_DB=1: iniciando servidor sin verificar conexión a la base de datos.');
-    }
-
+    await testConnection();
     // Inicialización/sincronización de base de datos centralizada
     await ensureDatabaseInitialized({ sentinelTable: 'usuario' });
     // Asegurar políticas RLS solo si está indicado por env
@@ -32,11 +23,6 @@ const startServer = async () => {
     // Iniciar el servidor
     app.listen(PORT, () => {
       console.log('🎉 Servidor iniciado exitosamente!');
-      console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
-      console.log(`📡 API disponible en http://localhost:${PORT}/api`);
-      console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`⏰ Hora de inicio: ${new Date().toLocaleString()}`);
-      console.log('✨ Backend listo para recibir conexiones');
     });
   } catch (error) {
     console.error('❌ Error al iniciar el servidor:', error);
