@@ -5,6 +5,8 @@ const { bootstrapAdminUser } = require('./services/bootstrapService');
 const { ensureRlsPolicies } = require('./services/rlsService');
 require('dotenv').config();
 
+const PORT = process.env.PORT || 3000;
+
 // Función para inicializar el servidor
 const startServer = async () => {
   console.log('🚀 Iniciando servidor...');
